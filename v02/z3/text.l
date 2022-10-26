@@ -12,6 +12,7 @@
 "!"         { return _EXCLAMATION; }
 [A-Z][a-z]* { return _CAPITAL_WORD; }
 [a-z]+      { return _WORD; }
+
 ","         { return _COMMA; }
 
 \n+			{ return _NEWLINE; }
