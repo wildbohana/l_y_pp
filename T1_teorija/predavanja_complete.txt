@@ -1,0 +1,182 @@
+Najvažniji cilj PP - prevesti pravilno (očuvati značenje, dobiti očekivano ponašanje)
+Ostali ciljevi - brzo izvršavanje prevođenja, brzo izvršavanje prevedenog programa, 
+optimalno korišćenje resursa, informativne poruke o greškama, oporavak od grešaka, mogućnost proširivanja i izmena
+
+Jedan jezik može imati više prevodilaca (implementacija)
+Polazni jezik - leksika - sintaksa - semantika - (generisanje IR - IR) - generisanje koda - ciljni jezik
+
+Leksika jezika 		– skup pravila koja definišu šta sve čini jezik (azbuka i dozvoljene reči)
+Sintaksa jezika 	– skup pravila koja definišu ispravno formirane programske strukture (gramatika)
+Semantika jezika 	– skup pravila koja određuju i upravljaju značenjem jezika
+
+Leksička analiza 	- skener (string -> tokeni, greške)
+Sintaksna analiza 	- parser (tokeni -> parse tree, greške)
+Semantička analiza 	- parser (AST -> označeni AST*, greške)
+
+Token je par koga čine vrsta tokena i vrednost tokena (nije obavezna)
+Vrste (klase) tokena: ključna reč, dodela, relacioni operator, tačka zarez, aritmetički operator, identifikator, literal...
+Lekseme su instance tokena koje su prepoznate prilikom obrade ulaznog stringa
+Flex - na osnovu leksike definisane regularnim izrazima automatski kreira skener (potrebna je formalizacija jezika)
+
+Osnovni pojmovi:
+- azbuka - skup simbola
+- reč (string) - konačan niz simbola iz azbuke
+- prazna reč
+- svih reči (uključujući i praznu azbuku)
+- jezik - podskup skupa svih reči nad nekom azbukom
+
+Pravila jezika možemo opisati preko:
+- Gramatike - definisanje pravila po kom se grade reči/stringovi (mehanizam za generisanje)
+- Automata - prihvataju ili ne prihvataju određenu reč kao reč nekog jezika (mehanizam za prepoznavanje)
+Za svaki regularni izraz postoji odgovarajući konačni automat i zna se precizan postupak kako se formira
+Bira se prvi pronađeni RE
+
+Gramatika je uređena četvorka G = (Σ, N, P, S) gde je:
+- Σ skup simbola (terminala)
+- N skup pojmova (neterminala)
+- P skup pravila izvođenja
+- S početni pojam
+
+Hijerarhija Čomskog - gramatike:
+Tip 3 - regularne gramatike (regularni jezici)
+Tip 2 - kontekstno slobodne gramatike (kontekstno slobodni jezici)
+Tip 1 - kontekstno osetljive gramatike (kontekstno osetljivi jezici)
+Tip 0 - gramatike bez restrikcije (jezici sa fraznom strukturom)
+
+Gramatike za opis leksike programskog jezika su znatno jednostavnije nego gramatike za opis sintakse programskog jezika
+
+Postupak:
+1. Regularni izrazi koji predstavljaju leksičku gramatiku se navode u specifikaciji 
+	(jezik.l)
+2. Specifikacija se prosleđuje flex programu. 
+	[$ flex jezik.l]
+3. Rezultat je izlazni fajl (lex.yy.c) u kom je definisana funkcija 
+	int yylex(void)
+4. Nakon kompajliranja dobija se izvršni fajl 
+	[$ gcc -o skener lex.yy.c]
+5. Pokreće se interaktivno ili se vrši analiza ulaznog fajla 
+
+Sintaksna analiza – provera da li je ulazni niz tokena formiran na osnovu pravila po kom se grade konstrukcije u PL
+Parser: tokeni + pravila -> AST (Abstract Syntax Tree), greške
+Problemi kod parsera: dvosmislenost, konflikti, prioritet, obrada grešaka...
+
+Pravila, pre svega, ukazuju na konkatenaciju (redosled)
+Često su rekurzivna čime se, praktično, omogućava ponavljanje
+Pravila bez rekurzije, praktično, omogućavaju zaustavljanje rekurzije
+Više pravila za isti pojam, praktično, omogućava uniju (alternative)
+Prazna reč, praktično i između ostalog, omogućava zaustavljanje rekurzije/ponavljanja
+
+CFG:
+- Konačan skup simbola (terminala)
+- Konačan skup pojmova (neterminala)
+- Konačan skup pravila P u obliku: Pojam -> X1X2...Xn
+- Početni pojam
+Izvođenje – koraci koji su doveli do izgradnje stringa (niz primenjenih pravila)
+Terminali (simboli) se ne mogu naći sa leve strane
+
+Proširene BNF forme - dodaju se oznake:
+- [ … ] – ponavljanje sadržaja 0 ili 1 put
+- { … } – ponavljanje sadržaja 0 ili više puta
+- ( ... ) – grupisanje
+- nekad: “,” - konkatenacija, “;” - kraj
+- nekad: *, +, ?
+
+Odlike bison-a:
+- bottom-up
+- shift-reduce
+- moguće gramatike su podskup CFG gramatika
+- formira potisni automat (konačni automat + stek) za CFG
+Tabela prelaza: shift, reduce, accept, error 
+
+Stablo parsiranja je struktura podataka koja odgovara gramatičkoj strukturi ulaznog stringa
+Stablo parsiranja, stablo izvođenja, konkretno sintaksno stablo != apstraktno sintaksno stablo
+Stablo parsiranja:
+- koren je početni pojam
+- listovi predstavljaju simbole ili prazan simbol
+- unutrašnju čvorovi predstavljaju pojmove 
+- unutrašnji čvor koji predstavlja pojam Y i koji ima naslednike X1, X2, ..., Xn predstavlja pravilo izvođenja Y->X1X2...Xn
+
+Stablo modelira asocijativnost operacija
+Leftmost derivation (najlevlje izvođenje, izvođenje s leva) - uvek se primenjuje pravilo na prvi pojam sa leve strane
+Rightmost derivation (najdešnje izvođenje, izvođenje s desna) - uvek se primenjuje pravilo na prvi pojam sa desne strane
+Postoje izvođenja koja ne prate ni jedno od ove dve heuristike
+
+Različita stabla parsiranja mogu odgovarati istom stringu
+Kažemo da je gramatika dvosmislena (višeznačna) ako za neki polazni string postoje bar dva različita stabla parsiranja
+Ako svaki string ima jedinstveno stablo parsiranja onda svaki string ima i jedinstveno najlevlje izvođenje i jedinstveno najdešnje izvođenje
+Dvosmislenost je osobina gramatike – ne jezika!
+Dvosmoslenost se može izbeći uvođenjem rekurzije (leva i desna rekurzija)
+
+Osim što moramo obezbediti asocijativnost operatora, moramo obezbediti i prioritet
+Bison:
+- operator naveden kasnije ima veći prioritet
+- operatori navedeni u istom redu imaju isti prioritet
+- postoji posebni mehanizmi za definisanje asocijativnosti i prioriteta
+
+Shift-reduce parseri:
+- Ukoliko postoji višeznačnost, javljaju se konflikti
+- Potencijalno se, u datom stanju, može izvršiti više akcija
+shift-reduce konflikti  - kada, posmatrajući trenutni token, može da se izvrši i jedna i druga akcija (podrazumevano - shift)
+reduce-reduce konflikti - kada postoji više pravila koja se mogu primeniti na ulazni niz (podrazumevano - prvo reduce pravilo)
+
+Token koji je kasnije definisan ima veći prioritet
+%precedence - definiše samo prioritet, ne definiše asocijativnost
+Postoji i modifikator (navodi se kod pravila) %prec - pravilo podrazumevano preuzima prioritet poslednjeg tokena
+
+Semantička pravila ćemo definisati neformalno, opisima i kroz primere
+Pravila više nisu kontekstno slobodna (kontekstno nezavisna)
+Postoje formalizacije (operaciona, aksiomska semantika, denotaciona semantika)
+
+Atributivna (atributska) gramatika – dodeljuju se atributi elementima
+Čvor u stablu parsiranja ima atribut nastao na osnovu zadatih pravila (anotirano stablo)
+Atributi:
+- sintetizovani – dobijaju se na osnovu atributa elemenata iz pravila (child nodes)
+- nasleđeni – zavise i od atributa parent čvora (npr. kontekst)
+
+Stablo parsiranja – stablo koji sadrži sve pojmove i tokene i odgovara izvođenju
+Apstraktno sintaksno stablo (AST) - stablo koje sadrži samo značajne delove sintaksnog stabla koji su nam potrebni za nastavak, za dalje faze (međureprezentaciju?)
+Jednom kad znamo da je parsirani niz tokena validan, većina informacija je nepotrebna
+Stablo parsiranja (parse tree) se tranformiše u AST (syntax tree), operatori prelaze u unutrašnje čvorove (umesto listova), liste se "uravnavaju"
+
+Nakon semantičke analize, završen je prednji deo kompajlera (front-end) koji ne zavisi od ciljnog jezika
+Nakon analize (leksička, sintaksna, semantička) dolazi na red sinteza (generisanje) koda
+
+Tokenima se dodeljuju vrednosti/atributi na osnovu vrednosti pročitanih leksema
+Pojmovima se dodeljuju vrednosti/atributi na osnovu semantičkih pravila
+
+Ako postoje identični globalni identifikatori i lokalni identifikatori neke funkcije, tada van te funkcije važe globalni, a unutar nje lokalni identifikatori
+Standardni identifikator main je rezervisan samo na globalnom nivou
+Podrazumeva se da je tip literala int ako nije eksplicitno naznačeno da je tip unsigned
+
+Elementi tabele simbola:
+- name - string simbola (leksema)
+- kind - vrsta simbola (FUN, VAR, PAR, LIT, REG)
+- type - tip simbola (INT, UINT)
+- atr1 - atribut 1
+   za funkciju je broj parametara
+   za parametar je redni broj parametra
+   za lok. prom. je redni broj promenljive
+   za ostale simbole - nije definisano
+- atr2 - atribut 2
+   za funkcije je tip parametra
+   za ostale simbole - nije definisano
+
+Ceo naš prevodilac se realizuje u jednom prolazu – tako se i naša TS popunjava i koristi
+Globalni identifikatori (imena funkcija) se dodaju u TS
+Lokalni identifikatori se dodaju odmah nakon odgovarajućeg globalnog
+Kada se završi prolaz kroz funkciju lokalni identifikatori se brišu
+
+Implementacija za TS:
+- enumeracije za vrstu i tip identifikatora
+- struktura za elemenat tabele
+- funkcije za rad sa tabelom
+
+Implementacija sematičkih pravila:
+- prilikom parsiranja
+- realizuju se u akcijama pravila u .y fajlu
+- koristi se TS 
+
+int var_num = 0; 	- Broj identifikatora u trenutnom opsegu (funkciji)
+int fun_idx = -1; 	- Indeks simbola funkcije koja se trenutno parsira
+int fcall_idx = -1;	- Indeks simbola funkcije čiji poziv parsiramo
+

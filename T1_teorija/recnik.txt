@@ -1,0 +1,28 @@
+akcija 			- C kod pridružen obrascu u flex specifikaciji ili pravilu u bison specifikaciji, izvršava se nakon prepoznavanja obrasca ili pravila
+bison 			- LALR parser za gramatiku napisanu u BNF notaciji
+BNF 			- način predstavljanja kontekstno nezavisnih gramatika, obično se koristi za specifikaciju formalnih gramatika programskih jezika
+dvosmislenost 	- dvosmislena gramatika je ona koja sadrži više od jednog pravila ili skupa pravila kojima se može prepoznati isti ulazni string 
+epsilon 		- prazan string
+flex 			- program koji generiše leksičke analizatore koji prepoznaju obasce
+gramatika 		- skup pravila koji zajedno definišu jezik
+jezik 			- definisan skup stringova iz nekog alfabeta
+konflikt 		- greška u bison gramatici koja se pojavljuje u situaciji kada se za isti ulazni niz tokena mogu izvršiti dve ili više akcija parsiranja
+CFG				- kontekstno nezavisna gramatika, gramatika u kojoj svako pravilo ima samo jedan pojam sa leve strane pravila 
+LALR 			- look ahead left to right - tehnika parsiranja
+lookahead 		- ulaz koji je pročitan od strane parsera ili skenera, ali još nije prepoznat kao deo obrasca ili pravila
+obrazac 		- u flex-ovom skeneru se opisuje pomoću regularnih izraza
+parsiranje 		- proces preuzimanja niza tokena i provere ispravnosti njihovog redosleda
+pojam 			- element graamtike koji se ne pojavljuje u ulaznom tekstu, nego se definiše pravilima 
+početni pojam 	- jedan pojam koji predstavlja "cilj" parsiranja ulaznog teksta 
+pravilo 		- u bison-u, apstraktni opis gramatike, ima levu i desnu stranu razdvojenu znakom ":"
+reduce 			- kada se u ulaznom tekstu prepozna niz simbola koji čini desnu stranu nekog pravila, oni se skidaju sa steka i menjaju sa pojmom sa leve strane pravila
+reduce/reduce 	- konflikt, situacija u kojoj istom nizu tokena odnovaraju dva ili više pravila 
+regularan izraz - jezik za opisivanje obrazaca koji služe za prepoznavanje niza karaktera
+shift 			- akcija u toku parsiranja u kojoj parser preuzima ulazni simbol i stavlja ga na stek
+shift/reduce 	- konflikt, situacija u kojoj parser može da uradi i shift i reduce akciju, javlja se zbog dvosmislenosti gramatike
+simbol 			- prepoznaje se u skeneru i šalje se parseru
+stek parsera 	- parser simbole i pojmove delimično prepoznatog pravila smešta na interni stek
+tabela simbola 	- struktura podataka koja sadrži informacije o imenima koja se pojavljuju u programu, tako da sve reference na isto ime mogu biti vezane za isti objekat
+tokenizacija 	- obavlja je skener, proces konvertovanja niza karaktera u niz tokena
+ulaz 			- podaci koje čita program
+vrednost 		- misli se ugl na semantičku vrednost simbola
