@@ -42,3 +42,4 @@ Greške mogu biti:
 - semantičke 	(operator primenjen na nekompatibilni operand)
 - logičke 		(beskonačan rekurzivni poziv)
 Ako kompajler ne može da se oporavi od greške, zaustaviće parsiranje
+
