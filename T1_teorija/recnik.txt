@@ -26,3 +26,4 @@ tabela simbola 	- struktura podataka koja sadrži informacije o imenima koja se 
 tokenizacija 	- obavlja je skener, proces konvertovanja niza karaktera u niz tokena
 ulaz 			- podaci koje čita program
 vrednost 		- misli se ugl na semantičku vrednost simbola
+
