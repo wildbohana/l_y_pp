@@ -54,3 +54,4 @@ Prilikom deklaracije tokena potrebno je navesti da li oni imaju uz sebe vezanu n
 %token _SEMICOLON
 %token <i> _AROP 
 %token <i> _RELOP
+
