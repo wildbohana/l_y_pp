@@ -48,12 +48,13 @@ Faze kompajliranja za micko:
 Sve faze kompajliranja koriste tabelu simbola
 
 Parser za miniC je proširen promenljivama koje se koriste u toku provere semantike:
- error_count - broj grešaka
- warning_count - broj upozorenja
- var_num - broj lokalnih promenljivih
- fun_idx - indeks u TS na kom se nalazi indeks trenutno parsirane funkcije
- fcall_idx - indeks u TS na kom se nalazi ime funkcije čiji poziv se trenutno parsira 
+- error_count - broj grešaka
+- warning_count - broj upozorenja
+- var_num - broj lokalnih promenljivih
+- fun_idx - indeks u TS na kom se nalazi indeks trenutno parsirane funkcije
+- fcall_idx - indeks u TS na kom se nalazi ime funkcije čiji poziv se trenutno parsira 
 
 Tipovi pojmova - iza ključne reči %type se navodi tip iz unije (<i> ili <s>), a zatim imena svih pojmova koji će biti tog tipa
-  %type <i> type num_exp exp literal parameter
-  %type <i> function_call argument rel_exp
+- %type <i> type num_exp exp literal parameter
+- %type <i> function_call argument rel_exp
+
