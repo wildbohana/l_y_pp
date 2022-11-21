@@ -180,3 +180,11 @@ int var_num = 0; 	- Broj identifikatora u trenutnom opsegu (funkciji)
 int fun_idx = -1; 	- Indeks simbola funkcije koja se trenutno parsira
 int fcall_idx = -1;	- Indeks simbola funkcije čiji poziv parsiramo
 
+Bonus:
+pojam variable - kod deklaracije promjenjive (int s;)
+formalna gramatike se NE sastoji od tokena
+regularna gramatika se koristi za pisanje leksičkih pravila
+bnf notacija služi za opis sintakse
+LR parseri su pogodni za automatsko generisanje
+back-end faze kompajliranja: leksička, sintaksna i semantička analiza
+y=f(); - exp, argument (nema veze što je () prazno)
