@@ -24,7 +24,9 @@
 "="                  { return _ASSIGN; }
 
 ","					 { return _COMMA; }
+
 "++"				 { return _INC; }
+
 "do"				 { return _DO; }
 "while"				 { return _WHILE; }
 
