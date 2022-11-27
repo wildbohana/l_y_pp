@@ -55,7 +55,7 @@
 program
 	: function_list
 	{  
-		if(lookup_symbol("main", FUN) == NO_INDEX)
+		if (lookup_symbol("main", FUN) == NO_INDEX)
 			err("undefined reference to 'main'");
 	}
 	;
@@ -69,7 +69,7 @@ function
 	: _TYPE _ID
 	{
 		fun_idx = lookup_symbol($2, FUN);
-		if(fun_idx == NO_INDEX)
+		if (fun_idx == NO_INDEX)
 			fun_idx = insert_symbol($2, FUN, $1, NO_ATR, NO_ATR);
 		else 
 			err("redefinition of function '%s'", $2);
@@ -144,10 +144,10 @@ assignment_statement
 	: _ID _ASSIGN num_exp _SEMICOLON
 	{
 		int idx = lookup_symbol($1, VAR|PAR);
-		if(idx == NO_INDEX)
+		if (idx == NO_INDEX)
 			err("invalid lvalue '%s' in assignment", $1);
 		else
-			if(get_type(idx) != get_type($3))
+			if (get_type(idx) != get_type($3))
 				err("incompatible types in assignment");
 	}
 	;
@@ -166,7 +166,7 @@ exp
 	| _ID
 	{
 		$$ = lookup_symbol($1, VAR|PAR);
-		if($$ == NO_INDEX)
+		if ($$ == NO_INDEX)
 			err("'%s' undeclared", $1);
 	}
 	| function_call
@@ -197,12 +197,12 @@ function_call
   	: _ID 
     {
         fcall_idx = lookup_symbol($1, FUN);
-        if(fcall_idx == NO_INDEX)
+        if (fcall_idx == NO_INDEX)
         	 err("'%s' is not a function", $1);
     }
     _LPAREN argument _RPAREN
     {
-        if(get_atr1(fcall_idx) != $4)
+        if (get_atr1(fcall_idx) != $4)
         	err("wrong number of args to function '%s'", get_name(fcall_idx));
         set_type(FUN_REG, get_type(fcall_idx));
         $$ = FUN_REG;
@@ -216,7 +216,7 @@ argument
 	}
 	| num_exp
     { 
-    	if(get_atr2(fcall_idx) != get_type($1))
+    	if (get_atr2(fcall_idx) != get_type($1))
     		err("incompatible type for argument in '%s'", get_name(fcall_idx));
       	$$ = 1;
     }
@@ -234,7 +234,7 @@ if_part
 rel_exp
   	: num_exp _RELOP num_exp
     {
-        if(get_type($1) != get_type($3))
+        if (get_type($1) != get_type($3))
         	err("invalid operands : relational operator");
     }
   	;
@@ -242,7 +242,7 @@ rel_exp
 return_statement
   	: _RETURN num_exp _SEMICOLON
     {
-    	if(get_type(fun_idx) != get_type($2))
+    	if (get_type(fun_idx) != get_type($2))
         	err("incompatible types in return");
     }
   	;
