@@ -46,3 +46,4 @@
 \/\/.*               { /* skip */ }
 .                    { printf("line %d: LEXICAL ERROR on char %c\n", yylineno, *yytext);}
 %%
+
