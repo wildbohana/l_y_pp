@@ -153,3 +153,4 @@ int yyerror(char *s) {
 int main() {
 	return yyparse();
 }
+
