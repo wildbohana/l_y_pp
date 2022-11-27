@@ -24,6 +24,7 @@
 "="                  { return _ASSIGN; }
 
 "void"				 { yylval.i = VOID; return _TYPE; }
+
 "for"				 { return _FOR; }
 "++"				 { return _INC; }
 
