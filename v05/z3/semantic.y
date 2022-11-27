@@ -98,9 +98,7 @@ parameter
 			insert_symbol($2, PAR, $1, 1, NO_ATR);
        		set_atr1(fun_idx, 1);
        		set_atr2(fun_idx, $1);
-		}
-
-		
+		}	
 	}
 	;
 
@@ -178,7 +176,7 @@ assignment_statement
         	if (get_type(idx) != get_type($3))
             	err("incompatible types in assignment");
     }
-  ;
+	;
 
 num_exp
 	: exp
@@ -187,7 +185,7 @@ num_exp
         if (get_type($1) != get_type($3))
         	err("invalid operands : arithmetic operation");
     }
-  ;
+	;
 
 exp
 	: literal
