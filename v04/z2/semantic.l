@@ -24,6 +24,7 @@
 "="                  { return _ASSIGN; }
 
 ","					 { return _COMMA; }
+
 "++"				 { return _INC; }
 
 "+"                  { yylval.i = ADD; return _AROP; }
