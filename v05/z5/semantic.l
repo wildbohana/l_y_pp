@@ -24,8 +24,10 @@
 "="                  { return _ASSIGN; }
 
 "void"				 { yylval.i = VOID; return _TYPE; }
+
 "for"				 { return _FOR; }
 "++"				 { return _INC; }
+
 "branch"			 { return _BRANCH; }
 "first"				 { return _FIRST; }
 "second"			 { return _SECOND; }
