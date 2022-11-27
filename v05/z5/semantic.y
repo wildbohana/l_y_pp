@@ -292,7 +292,7 @@ assignment_statement
         	if (get_type(idx) != get_type($3))
             	err("incompatible types in assignment");
     }
-  ;
+	;
 
 num_exp
 	: exp
@@ -301,7 +301,7 @@ num_exp
         if (get_type($1) != get_type($3))
         	err("invalid operands : arithmetic operation");
     }
-  ;
+	;
 
 exp
 	: literal
