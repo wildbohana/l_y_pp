@@ -55,7 +55,17 @@ function_list
 	;
 
 function
-	: type _ID _LPAREN parameter _RPAREN body
+	: type _ID _LPAREN parameter_list _RPAREN body
+	;
+
+parameter_list
+	: 
+	| parameters
+	;
+
+parameters
+	: parameter
+	| parameters _COMMA parameter
 	;
 
 type
@@ -63,8 +73,7 @@ type
 	;
 
 parameter
-	: /* empty */
-	| type _ID
+	: type _ID
 	;
 
 body
