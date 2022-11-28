@@ -1,0 +1,5 @@
+This is sentence.
+
+Two sentences makes paragraph.
+I moras napraviti novi red na kraju da ne bi izbacio error jer se paragraph pretvara u tekst samo kada ima NL na kraju.
+Da, i ovo su paragrafi jer kao NL lol iako je spojeno.
