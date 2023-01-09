@@ -20,6 +20,9 @@
 	int fcall_idx = -1;
 	int lab_num = -1;
 	FILE *output;
+
+	int inc_num = 0;
+	int inc_array[100];
 %}
 
 %union {
@@ -43,11 +46,10 @@
 %token <i> _AROP
 %token <i> _RELOP
 
+%token _INC
+
 %type <i> num_exp exp literal
 %type <i> function_call argument rel_exp if_part
-
-// dodato
-%type <i> cond_exp
 
 %nonassoc ONLY_IF
 %nonassoc _ELSE
@@ -157,6 +159,20 @@ assignment_statement
 				if (get_type(idx) != get_type($3))
 					err("incompatible types in assignment");
 			gen_mov($3, idx);
+
+			for (int i = 0; i < inc_num; i++)
+			{
+				if (get_type(inc_array[i]) == UINT)
+					code("\n\t\tADDU\t");
+				else
+					code("\n\t\tADDS\t");
+				
+				gen_sym_name(inc_array[i]);
+				code(", $1, ");
+				gen_sym_name(inc_array[i]);
+				inc_array[i] = -1;
+			}
+			inc_num = 0;
 		}
 	;
 
@@ -204,33 +220,18 @@ exp
 		{ 
 			$$ = $2; 
 		}
-	| _LPAREN rel_exp _RPAREN _QMARK cond_exp _COLON cond_exp
+	| _ID _INC
 		{
-			int out = take_reg();
-			lab_num++;
-			if (get_type($5) != get_type($7))
-				err("exp1 i exp2 nisu istog tipa");
+			if (lookup_symbol($1, FUN) != NO_INDEX)
+				err("Postincrement may only be used on variables, not funkctions!");
 			
-			code("\n\t\t%s\t@false%d", opp_jumps[$2],lab_num);
-			code("\n@true%d:", lab_num);
-			gen_mov($5, out);
-			code("\n\t\tJMP \t@exit%d", lab_num);
-			code("\n@false%d:", lab_num);
-			gen_mov($7, out);
-			code("\n@exit%d:", lab_num);
-
-			$$ = out;
+			$$ = lookup_symbol($1, VAR|PAR);
+			if ($$ == NO_INDEX)
+				err("%s is not declared previously as a variable.", $1);
+			
+			inc_array[inc_num++] = $$;
 		}
 	;
-
-cond_exp
-	: _ID
-		{
-			if ( ($$ = lookup_symbol($1, (VAR|PAR))) == NO_INDEX )
-				err("'%s' undeclared", $1);
-		}
-	| literal
-;
 
 literal
 	: _INT_NUMBER
