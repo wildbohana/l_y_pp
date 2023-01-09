@@ -1,0 +1,47 @@
+iskaz - statement
+izraz - expression
+
+expression vraća semantičku vrednost preko $<i>$
+kada imaš ugnježdene statemente, vraćaj semantičku vrednost akcije za 
+++lab_num, da kasnije možeš da pristupaš odgovarajućem broju tabele
+
+labela se piše sa code makroom i sa lab_num (obavezno inkrementiraj!!!)
+ADDx se takođe piše preko code makroa, sa gen_sym_name
+
+lokalne promenljive: -4(%14)...
+parametri funkcija:   8(%14)...
+konstante u asemblerskom kodu: $3, $15...
+
+rel_exp sam generiše CMPx
+kao povratnu vrednost dobijamo potreban skok (kada je ispunjen uslov)
+da bi dobili suprotan skok (kada nije ispunjen uslov), 
+koristimo opp_jumps[$rel_exp]
+
+skokovi se generišu sa code makroom (jer nema ništa za njih posebno)
+
+svi statementi se sami generišu (osim ako mi ne dodamo neki novi)
+
+gen_mov kao parametar prima indeks u tabeli simbola
+za literale je to $i (njegov red u izrazu)
+za _ID je to lookup_symbol($i, VAR|PAR) (često se čuva u promenljivoj)
+
+za _ID koristiš gen_sym_name(i); (gde je i povr_vr od lookup_symbol())
+on sam ispiše asemblerski kod za prosleđeni parametar/promenlivu
+
+vrednost literala: int vr = atoi(get_name($i));
+
+-- primeri konverzije mc koda u asemblerski kod:
+
+-- za ovo već postoji generisanje koda (assignment statement)
+suma = suma + i;
+ADDS -8(%14), -4(%14), %0
+MOV %0, -8(%14)
+
+-- inkrement ne postoji u mc, to moraš sama
+i++;
+ADDS -4(%14), $1, -4(%14)
+
+-- for(i = 0; i < 8; i++)
+kada praviš for, i=0 (MOV $0, -4(%14)) se obavla pre for petlje
+ako se radi unutar petlje, i će se svaki put anulirati
+
